@@ -845,13 +845,13 @@ export default function HiringForm({ initialSelectedRole, onSubmissionSuccess })
                 {/* Resume Upload Pill */}
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-300 mb-1.5">
-                    Attach Resume / CV (PDF, DOCX — Max 15MB)
+                    Attach Resume / CV (PDF, DOCX, TXT, Image — Max 15MB)
                   </label>
 
                   <input
                     ref={fileInputRef}
                     type="file"
-                    accept=".pdf,.doc,.docx,.jpg,.png"
+                    accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.webp"
                     onChange={handleFileChange}
                     className="hidden"
                   />
@@ -869,7 +869,7 @@ export default function HiringForm({ initialSelectedRole, onSubmissionSuccess })
                           <p className="text-xs font-bold text-white group-hover:text-[#ccf141] transition-colors">
                             Tap to attach resume file
                           </p>
-                          <p className="text-[10px] text-neutral-500">PDF preferred</p>
+                          <p className="text-[10px] text-neutral-500">PDF, DOCX, TXT, or Image</p>
                         </div>
                       </div>
                       <span className="text-[10px] uppercase font-bold px-2 py-1 bg-neutral-900 text-neutral-300 rounded border border-neutral-800">

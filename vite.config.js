@@ -13,11 +13,13 @@ const srcImg = 'C:/Users/Admin/.gemini/antigravity-ide/brain/4a6bf79f-3d07-4197-
 const srcLogo = 'C:/Users/Admin/.gemini/antigravity-ide/brain/4a6bf79f-3d07-4197-ab16-23aac6d94d29/.user_uploaded/media_1792832229357.png';
 const srcNavbarLogo = 'C:/Users/Admin/.gemini/antigravity-ide/brain/4a6bf79f-3d07-4197-ab16-23aac6d94d29/.user_uploaded/media_1792832353110.png';
 const srcFormBg = 'C:/Users/Admin/.gemini/antigravity-ide/brain/4a6bf79f-3d07-4197-ab16-23aac6d94d29/.user_uploaded/media_1792834862179.png';
+const srcOgImage = 'C:/Users/Admin/.gemini/antigravity-ide/brain/4a6bf79f-3d07-4197-ab16-23aac6d94d29/.user_uploaded/media_1792837493016.png';
 const publicDir = path.resolve(__dirname, 'public');
 const destImg = path.resolve(publicDir, 'hero-bg.jpg');
 const destLogo = path.resolve(publicDir, 'bxc-logo.png');
 const destNavbarLogo = path.resolve(publicDir, 'navbar-logo.png');
 const destFormBg = path.resolve(publicDir, 'form-bg.png');
+const destOgImage = path.resolve(publicDir, 'og-image.png');
 
 try {
   if (!fs.existsSync(publicDir)) {
@@ -34,6 +36,9 @@ try {
   }
   if (fs.existsSync(srcFormBg)) {
     fs.copyFileSync(srcFormBg, destFormBg);
+  }
+  if (fs.existsSync(srcOgImage)) {
+    fs.copyFileSync(srcOgImage, destOgImage);
   }
 } catch (err) {
   console.error('Error copying assets:', err);
