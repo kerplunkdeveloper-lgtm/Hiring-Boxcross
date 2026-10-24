@@ -41,9 +41,42 @@ try {
     fs.copyFileSync(srcFormBg, destFormBg);
   }
   if (fs.existsSync(srcOgImage)) {
-    fs.copyFileSync(srcOgImage, destOgImage);
     fs.copyFileSync(srcOgImage, destOgPoster);
-    fs.copyFileSync(srcOgImage, destOgJpg);
+    
+    // Compress and resize for WhatsApp (WhatsApp hard limit is 300KB!)
+    try {
+      const psScript = `
+        Add-Type -AssemblyName System.Drawing;
+        $src = [System.Drawing.Image]::FromFile('${srcOgImage.replace(/\\/g, '/')}');
+        $w = 600;
+        $h = [int]($src.Height * ($w / $src.Width));
+        $bmp = New-Object System.Drawing.Bitmap $w, $h;
+        $g = [System.Drawing.Graphics]::FromImage($bmp);
+        $g.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic;
+        $g.DrawImage($src, 0, 0, $w, $h);
+        
+        $codec = [System.Drawing.Imaging.ImageCodecInfo]::GetImageEncoders() | Where-Object { $_.FormatDescription -eq 'JPEG' };
+        $p = New-Object System.Drawing.Imaging.EncoderParameters(1);
+        $p.Param[0] = New-Object System.Drawing.Imaging.EncoderParameter([System.Drawing.Imaging.Encoder]::Quality, [long]82);
+        
+        $bmp.Save('${destOgJpg.replace(/\\/g, '/')}', $codec, $p);
+        
+        $src.Dispose();
+        $bmp.Dispose();
+        $g.Dispose();
+      `.replace(/\n/g, ' ');
+
+      execSync(`powershell -NoProfile -Command "${psScript}"`, { stdio: 'ignore' });
+
+      // Ensure both .jpg and .png are under 100KB for WhatsApp
+      if (fs.existsSync(destOgJpg)) {
+        fs.copyFileSync(destOgJpg, destOgImage);
+      }
+    } catch (e) {
+      console.warn('Could not compress image with powershell, copying raw:', e.message);
+      fs.copyFileSync(srcOgImage, destOgImage);
+      fs.copyFileSync(srcOgImage, destOgJpg);
+    }
   }
 } catch (err) {
   console.error('Error copying assets:', err);
