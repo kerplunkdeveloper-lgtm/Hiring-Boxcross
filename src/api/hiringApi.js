@@ -82,9 +82,17 @@ export const submitHiringApplication = async (formState, resumeFile) => {
 
   // Section 5: Resume & Portfolio
   if (resumeFile) {
+    console.log('[BXC Frontend] 📄 Attaching binary resume file:', {
+      name: resumeFile.name,
+      size: `${(resumeFile.size / 1024).toFixed(1)} KB`,
+      type: resumeFile.type || 'application/octet-stream'
+    });
     formData.append('resume', resumeFile); // Key MUST be 'resume'
   } else if (formState.resumeUrl) {
+    console.log('[BXC Frontend] 🔗 Sending cloud resume URL:', formState.resumeUrl);
     formData.append('resumeUrl', formState.resumeUrl.trim());
+  } else {
+    console.warn('[BXC Frontend] ⚠️ No resume file was attached by candidate!');
   }
 
   if (formState.portfolioLink) {
@@ -101,14 +109,14 @@ export const submitHiringApplication = async (formState, resumeFile) => {
   formData.append('declarationAgreed', formState.declarationAgreed ? 'true' : 'false');
 
   try {
+    console.log(`[BXC Frontend] 🚀 Transmitting multipart form to: ${endpoint}`);
     const response = await fetch(endpoint, {
       method: 'POST',
-      // Notice: Never set 'Content-Type': 'multipart/form-data' manually,
-      // the browser automatically sets it with the boundary!
       body: formData,
     });
 
     const result = await response.json();
+    console.log('[BXC Frontend] 📥 Backend responded with:', result);
 
     if (!response.ok || !result.success) {
       throw new Error(result.message || `Submission failed with status: ${response.status}`);
