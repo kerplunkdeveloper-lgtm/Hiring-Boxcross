@@ -43,6 +43,7 @@ try {
   if (fs.existsSync(srcOgImage)) {
     fs.copyFileSync(srcOgImage, destOgImage);
     fs.copyFileSync(srcOgImage, destOgPoster);
+    fs.copyFileSync(srcOgImage, destOgJpg);
   }
 } catch (err) {
   console.error('Error copying assets:', err);
