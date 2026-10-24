@@ -41,11 +41,8 @@ try {
     fs.copyFileSync(srcFormBg, destFormBg);
   }
   if (fs.existsSync(srcOgImage)) {
+    fs.copyFileSync(srcOgImage, destOgImage);
     fs.copyFileSync(srcOgImage, destOgPoster);
-  }
-  if (fs.existsSync(srcOgBanner)) {
-    fs.copyFileSync(srcOgBanner, destOgJpg);
-    fs.copyFileSync(srcOgBanner, destOgImage);
   }
 } catch (err) {
   console.error('Error copying assets:', err);
